@@ -1,15 +1,15 @@
 //Preparing the application to start'
 
-var om2mServer = "http://34.64.70.229:8080";
+var om2mServer = "http://192.168.0.244:8080";
 
-var om2mServer_BATTERY = om2mServer + "/~/in-cse/fcnt-36457514";
-var om2mServer_LED1 = om2mServer + "/~/in-cse/cnt-989425891";
-var om2mServer_LED2 = om2mServer + "/~/in-cse/cnt-11612402";
-var om2mServer_AWNING = om2mServer + "/~/in-cse/cnt-296204159";
-var om2mServer_GPS = om2mServer + "/~/in-cse/fcnt-601273755";
-var om2mServer_AD = om2mServer + "/~/in-cse/fcnt-955926209";
+var om2mServer_BATTERY = om2mServer + "/~/in-cse/fcnt-884158197";
+//var om2mServer_LED1 = om2mServer + "/~/in-cse/cnt-4";
+//var om2mServer_LED2 = om2mServer + "/~/in-cse/cnt-11612402";
+//var om2mServer_AWNING = om2mServer + "/~/in-cse/cnt-296204159";
+//var om2mServer_GPS = om2mServer + "/~/in-cse/fcnt-601273755";
+//var om2mServer_AD = om2mServer + "/~/in-cse/fcnt-955926209";
 
-var default_AD_URL = "https://www.youtube.com/embed/xLD8oWRmlAE";
+//var default_AD_URL = "https://www.youtube.com/embed/xLD8oWRmlAE";
 
 var express = "";
 var bodyParser = "";

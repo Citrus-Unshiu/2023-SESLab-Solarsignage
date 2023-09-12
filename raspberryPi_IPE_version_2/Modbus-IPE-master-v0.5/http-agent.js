@@ -1,9 +1,9 @@
 import request from 'request-promise';
-import {cseUrl, fcntUrls} from './config'
+import {cseUrl, cntUrls} from './config'
 //import slave from './app.js'
 
 export async function uploadMonitoringData(data) {
-    for (const module in fcntUrls) {
+    for (const module in cntUrls) {
         /*if(JSON.stringify(data[module]) === '{}'){
             console.log('NULL data')
 	    slave.close()
@@ -11,9 +11,9 @@ export async function uploadMonitoringData(data) {
 	    console.log('reconnected the slave 2')
 	}*/
 	try{
-		await updateFlexContainer(cseUrl.concat(fcntUrls[module]), data[module])
+		await updateContainer(cseUrl.concat(cntUrls[module]), data[module])
 	} catch(e){
-		console.log("updateFlexContainer error")
+		console.log("updateContainer error")
 	}
     }
     // await updateFlexContainer(cseUrl.concat(fcntUrls['battery']), data['battery'])
@@ -23,7 +23,7 @@ async function updateFlexContainer(url, data) {
     let options = {
         method: 'PUT',
         uri: url,
-        port: 8080,
+        port: 3000,
         body: {
             "m2m:fcnt": data
         },
@@ -32,6 +32,30 @@ async function updateFlexContainer(url, data) {
             'X-M2M-RI': 'ipe',
             'X-M2M-Origin': 'admin:admin',
             'Content-Type': 'application/json;ty=28'
+        },
+        json: true
+    };
+    try {
+	console.log(data);
+        return await request(options);
+    } catch (e) {
+        console.log('PUT request error: ', e);
+    }
+}
+
+async function updateContainer(url, data) {
+    let options = {
+        method: 'PUT',
+        uri: url,
+        port: 3000,
+        body: {
+            "m2m:cnt": data
+        },
+        headers: {
+            'Accept': 'application/json',
+            'X-M2M-RI': 'ipe',
+            'X-M2M-Origin': 'admin:admin',
+            'Content-Type': 'application/json;ty=3'
         },
         json: true
     };

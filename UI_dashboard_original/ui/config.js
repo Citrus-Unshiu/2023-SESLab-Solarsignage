@@ -1,6 +1,6 @@
-export const UI_SOCKET_URL = "http://34.64.223.100:19997";
+export const UI_SOCKET_URL = "http://192.168.0.203:19997";
 
-export const WRAPPER_URL = "http://34.64.223.100:19998"
+export const WRAPPER_URL = "http://192.168.0.203:19998"
 
 export const PUSH_CHARGING_URL = WRAPPER_URL + "/charging";
 export const PUSH_DISCHARGING_URL = WRAPPER_URL + "/discharging";

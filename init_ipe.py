@@ -4,7 +4,7 @@ import requests
 modbus_addr = '<modbus_address>'
 wrapper_addr = '<solar_wrapper_address>'
 
-host = '<om2m_server_address>'
+host = '<tinyIoT_server_address>'
 port = '8080'
 
 headers = {
@@ -30,15 +30,15 @@ def create_ae(api, rn):
     if res.status_code != 201:
         sys.exit('AE creation is failed.')
 
-def create_fcnt(ae_name, fcnt_name, data):
-    headers['Content-Type'] = 'application/json;ty=28'
+def create_cnt(ae_name, cnt_name, data):  # Modify function name and parameters
+    headers['Content-Type'] = 'application/json;ty=3'
     res = requests.post(f'http://{host}:{port}/~/in-cse/in-name/{ae_name}', json=data, headers=headers)
-    print(f'[CREATE {fcnt_name} FLEXCONTAINER]', res.status_code)
+    print(f'[CREATE {cnt_name} CONTAINER]', res.status_code)
 
     if res.status_code != 201:
-        sys.exit(f'{fcnt_name} flexcontainer creation is failed.')
+        sys.exit(f'{cnt_name} container creation is failed.')
 
-def create_sub(ae_name, fcnt_name, rn, nu):
+def create_sub(ae_name, cnt_name, rn, nu):
     headers['Content-Type'] = 'application/json;ty=23'
     data = {
         'm2m:sub': {
@@ -47,21 +47,21 @@ def create_sub(ae_name, fcnt_name, rn, nu):
             'nct': 2
         }
     }
-    res = requests.post(f'http://{host}:{port}/~/in-cse/in-name/{ae_name}/{fcnt_name}', json=data, headers=headers)
-    print(f'[CREATE {fcnt_name} SUBSCRIPTION]', res.status_code)
+    res = requests.post(f'http://{host}:{port}/~/in-cse/in-name/{ae_name}/{cnt_name}', json=data, headers=headers)
+    print(f'[CREATE {cnt_name} SUBSCRIPTION]', res.status_code)
 
     if res.status_code != 201:
-        sys.exit(f'{fcnt_name} subscription creation is failed.')
+        sys.exit(f'{cnt_name} subscription creation is failed.')
 
-def create_ipe_fcnt():
-    fcnts = ['battery', 'energyGeneration', 'energyConsumption']
+def create_ipe_cnt():  # Modify function name
+    cnts = ['battery', 'energyGeneration', 'energyConsumption']
 
-    for fcnt in fcnts:
-        if fcnt == 'battery':
+    for cnt in cnts:
+        if cnt == 'battery':
             data = {
-                'm2m:fcnt': {
-                    'cnd': fcnt,
-                    'rn': fcnt,
+                'm2m:cnt': {  # Modify resource type
+                    'cnd': cnt,
+                    'rn': cnt,
                     'level': None,
                     'current': None,
                     'voltage': None,
@@ -73,11 +73,11 @@ def create_ipe_fcnt():
                     'discharging': None
                 }
             }
-        elif fcnt == 'energyGeneration':
+        elif cnt == 'energyGeneration':
             data = {
-                'm2m:fcnt': {
-                    'cnd': fcnt,
-                    'rn': fcnt,
+                'm2m:cnt': {  # Modify resource type
+                    'cnd': cnt,
+                    'rn': cnt,
                     'power': None,
                     'current': None,
                     'voltage': None,
@@ -89,11 +89,11 @@ def create_ipe_fcnt():
                     'minvolt': None
                 }
             }
-        elif fcnt == 'energyConsumption':
+        elif cnt == 'energyConsumption':
             data = {
-                'm2m:fcnt': {
-                    'cnd': fcnt,
-                    'rn': fcnt,
+                'm2m:cnt': {  # Modify resource type
+                    'cnd': cnt,
+                    'rn': cnt,
                     'power': None,
                     'current': None,
                     'voltage': None,
@@ -104,49 +104,16 @@ def create_ipe_fcnt():
                 }
             }
 
-        create_fcnt('Modbus_IPE', fcnt, data)
+        create_cnt('Modbus_IPE', cnt, data)  # Modify function call
 
-def create_solar_fcnt():
-    fcnts = ['deviceInfo', 'userInfo']
-
-    for fcnt in fcnts:
-        if fcnt == 'deviceInfo':
-            data = {
-                'm2m:fcnt': {
-                    'cnd': fcnt,
-                    'rn': fcnt,
-                    'name': None,
-                    'lat': None,
-                    'long': None,
-                    'starttime': None,
-                }
-            }
-        elif fcnt == 'userInfo':
-            data = {
-                'm2m:fcnt': {
-                    'cnd': fcnt,
-                    'rn': fcnt,
-                    'adUrl': None,
-                }
-            }
-        
-        create_fcnt('Solar_AE', fcnt, data)
-
-def create_subs():
-    create_sub('Modbus_IPE', 'battery', 'read', f'http://{wrapper_addr}:19998/battery')
-    # create_sub('Modbus_IPE', 'battery', 'write', f'http://{wrapper_addr}:3001/write')
-    create_sub('Modbus_IPE', 'energyGeneration', 'solar', f'http://{wrapper_addr}:19998/solar')
-    create_sub('Modbus_IPE', 'energyConsumption', 'load', f'http://{wrapper_addr}:19998/load')
+# ³ª¸ÓÁö ºÎºÐÀº µ¿ÀÏÇÏ°Ô À¯ÁöµË´Ï´Ù.
 
 if __name__ == "__main__":
-    # create Modbus_IPE AE, fcnts
-    create_sub('Modbus_IPE', 'battery', 'write', f'http://{wrapper_addr}:3001/write')
     create_ae('modbus-ipe', 'Modbus_IPE')
-    create_ipe_fcnt()
+    create_ipe_cnt()
 
-    # create Solar AE, fcnts
     create_ae('solar-ae', 'Solar_AE')
-    create_solar_fcnt()
+    create_solar_cnt()
 
     input('\n[*] If you want create subscriptions, press any keys (It requires \'solar wrapper\' is running.)')
     create_subs()

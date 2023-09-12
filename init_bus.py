@@ -1,13 +1,13 @@
 import requests
 
-bus_addr = '<bus_shelter_address>'
+bus_addr = '192.168.0.203'
 
-host = '<om2m_server_address>'
+host = '192.168.0.244'
 port = '8080'
 
 ae_name = 'bus_shelter'
 headers = {
-    'X-M2M-Origin': '<om2m-id>:<om2m-passwd>',
+    'X-M2M-Origin': 'admin:admin',
     'Content-Type': '',
     'Cache-Control': 'no-cache',
 }

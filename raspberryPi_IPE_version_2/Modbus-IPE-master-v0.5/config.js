@@ -6,10 +6,16 @@ export const slaveConfig = {
     stopBits: 1
 };
 
-export const cseUrl = 'http://34.64.70.229:8080';
+export const cseUrl = 'http://127.0.0.1:3000';
 
-export const fcntUrls = {
-    battery: '/~/in-cse/fcnt-36457514',
-    energyGeneration: '/~/in-cse/fcnt-862102580',
-    energyConsumption: '/~/in-cse/fcnt-443342727'
-};
+export const cntUrls = {
+    battery: '/TinyIoT',
+    energyGeneration: '/TinyIoT',
+    energyConsumption: '/TinyIoT'
+}
+
+//export const cntUrls = {
+//    battery: '/~/in-cse/fcnt-285278795',
+//    energyGeneration: '/~/in-cse/fcnt-477048984',
+//    energyConsumption: '/~/in-cse/fcnt-800816461'
+//};
