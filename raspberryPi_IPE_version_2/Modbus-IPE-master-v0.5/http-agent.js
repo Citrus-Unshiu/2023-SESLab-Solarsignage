@@ -1,5 +1,5 @@
 import request from 'request-promise';
-import {cseUrl, cntUrls} from './config'
+import {cseUrl, cntUrls, subRn}  from './config'
 //import slave from './app.js'
 
 export async function uploadMonitoringData(data) {
@@ -44,26 +44,29 @@ async function updateFlexContainer(url, data) {
 }
 
 async function updateContainer(url, data) {
-    let options = {
-        method: 'PUT',
-        uri: url,
-        port: 3000,
-        body: {
-            "m2m:cnt": data
-        },
-        headers: {
-            'Accept': 'application/json',
-            'X-M2M-RI': 'ipe',
-            'X-M2M-Origin': 'admin:admin',
-            'Content-Type': 'application/json;ty=3'
-        },
-        json: true
-    };
-    try {
-	console.log(data);
-        return await request(options);
-    } catch (e) {
-        console.log('PUT request error: ', e);
+    //data 가공해서 하나하나 넣어야됨
+    for (const item of subRn) {
+        let options = {
+            method: 'PUT',
+            uri: url + "/" + item,
+            port: 3000,
+            body: {
+                "m2m:cin": data
+            },
+            headers: {
+                'Accept': 'application/json',
+                'X-M2M-RI': 'ipe',
+                'X-M2M-Origin': 'admin:admin',
+                'Content-Type': 'application/json;ty=4'
+            },
+            json: true
+        };
+        try {
+        console.log(data);
+            return await request(options);
+        } catch (e) {
+            console.log('PUT request error: ', e);
+        }
     }
 }
 

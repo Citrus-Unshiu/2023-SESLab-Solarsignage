@@ -1,5 +1,6 @@
 import sys
 import requests
+import json
 
 modbus_addr = '<modbus_address>'
 wrapper_addr = '<solar_wrapper_address>'
@@ -54,59 +55,47 @@ def create_sub(ae_name, cnt_name, rn, nu):
         sys.exit(f'{cnt_name} subscription creation is failed.')
 
 def create_ipe_cnt():  # Modify function name
+    IPE_NAME = "Modbus_IPE"
     cnts = ['battery', 'energyGeneration', 'energyConsumption']
-
-    for cnt in cnts:
-        if cnt == 'battery':
-            data = {
-                'm2m:cnt': {  # Modify resource type
-                    'cnd': cnt,
-                    'rn': cnt,
-                    'level': None,
-                    'current': None,
-                    'voltage': None,
-                    'power': None,
-                    'maxvolt': None,
-                    'minvolt': None,
-                    'temp': None,
-                    'charging': None,
-                    'discharging': None
-                }
+    battery_subrn = ["cnd", "rn", "level", "current", "voltage", "power", "maxvolt", "minvolt", "temp", "charging", "discharging"]
+    energyGeneration_subrn = ["cnd", "rn", "power", "current", "voltage", "daily", "monthly", "annual", "total", "maxvolt", "minvolt"]
+    energyConsumption_subrn = ["cnd", "rn", "power", "current", "voltage", "daily", "monthly", "annual", "total"]
+    
+    
+    for cnt in cnts:    
+        data = {
+            "m2m:cnt" : {
+                "rn" : cnt
             }
-        elif cnt == 'energyGeneration':
-            data = {
-                'm2m:cnt': {  # Modify resource type
-                    'cnd': cnt,
-                    'rn': cnt,
-                    'power': None,
-                    'current': None,
-                    'voltage': None,
-                    'daily': None,
-                    'monthly': None,
-                    'annual': None,
-                    'total': None,
-                    'maxvolt': None,
-                    'minvolt': None
-                }
-            }
-        elif cnt == 'energyConsumption':
-            data = {
-                'm2m:cnt': {  # Modify resource type
-                    'cnd': cnt,
-                    'rn': cnt,
-                    'power': None,
-                    'current': None,
-                    'voltage': None,
-                    'daily': None,
-                    'monthly': None,
-                    'annual': None,
-                    'total': None
-                }
-            }
+        }
+        if cnt == "battery":            
+            create_cnt(IPE_NAME, cnt, data)
+            for subrn in battery_subrn:
+                data = {
+                    "m2m:cnt" : {
+                        "rn" : subrn
+                    }
+                }       
+                create_cnt(IPE_NAME + f"/{subrn}", subrn, data)
+        if cnt == "energyGeneration":
+            create_cnt(IPE_NAME, cnt, data)
+            for subrn in energyGeneration_subrn:
+                data = {
+                    "m2m:cnt" : {
+                        "rn" : subrn
+                    }
+                }       
+                create_cnt(IPE_NAME + f"/{subrn}", subrn, data)
+        if cnt == "energyConsumption":
+            create_cnt(IPE_NAME, cnt, data)
+            for subrn in energyConsumption_subrn:
+                data = {
+                    "m2m:cnt" : {
+                        "rn" : subrn
+                    }
+                }       
+                create_cnt(IPE_NAME + f"/{subrn}", subrn, data)
 
-        create_cnt('Modbus_IPE', cnt, data)  # Modify function call
-
-# ³ª¸ÓÁö ºÎºÐÀº µ¿ÀÏÇÏ°Ô À¯ÁöµË´Ï´Ù.
 
 if __name__ == "__main__":
     create_ae('modbus-ipe', 'Modbus_IPE')
@@ -116,4 +105,4 @@ if __name__ == "__main__":
     create_solar_cnt()
 
     input('\n[*] If you want create subscriptions, press any keys (It requires \'solar wrapper\' is running.)')
-    create_subs()
+    create_sub()

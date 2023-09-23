@@ -9,9 +9,15 @@ export const slaveConfig = {
 export const cseUrl = 'http://127.0.0.1:3000';
 
 export const cntUrls = {
-    battery: '/TinyIoT',
-    energyGeneration: '/TinyIoT',
-    energyConsumption: '/TinyIoT'
+    battery: '/TinyIoT/battery',
+    energyGeneration: '/TinyIoT/energyGeneration',
+    energyConsumption: '/TinyIoT/energyConsumption'
+}
+
+export const subRn = {
+    battery : ["cnd", "rn", "level", "current", "voltage", "power", "maxvolt", "minvolt", "temp", "charging", "discharging"],
+    energyGeneration : ["cnd", "rn", "power", "current", "voltage", "daily", "monthly", "annual", "total", "maxvolt", "minvolt"],
+    energyConsumption : ["cnd", "rn", "power", "current", "voltage", "daily", "monthly", "annual", "total"]
 }
 
 //export const cntUrls = {
